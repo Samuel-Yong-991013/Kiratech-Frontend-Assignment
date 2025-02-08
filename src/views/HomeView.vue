@@ -1,27 +1,26 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { useRouter } from "vue-router";
 
 const users = ref([]); // Store user data
 const searchQuery = ref(""); // Search input
 const refresh =ref(false); //Refresh button state
 const selectedUser = ref();//Store data of selected user
-const router = useRouter();
 
 const isPopupOpen = ref(false);
 
+// Function to open popup. Additionally, passes user data to the popup
 const openPopup = (userData) => {
   selectedUser.value = userData;
   console.log(selectedUser.value);
   isPopupOpen.value = true;
 };
 
+// Function to close the popup
 const closePopup = (event) => {
   if (event.target.id === "popup-overlay") {
     isPopupOpen.value = false;
   }
 };
-
 
 // Fetch Data from API
 const fetchData = async () => {
