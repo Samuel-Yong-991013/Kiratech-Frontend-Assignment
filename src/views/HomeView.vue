@@ -65,6 +65,7 @@ onMounted(fetchData);
           class="bg-white hover:bg-[#181818] hover:text-white border-2 border-white text-black font-bold py-2 px-4 rounded-full"
           :disabled="loading"
           >
+            <span class="pi pi-refresh"></span>
             {{ loading ? "Refreshing..." : "Refresh table" }}
           </button>
         </div>
