@@ -108,7 +108,7 @@ onMounted(fetchData);
   <!-- Popup div for user details -->
   <div v-if="isPopupOpen" id="popup-overlay" @click="closePopup"
         class="z-50 fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-[500px] text-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[600px] text-center">
       <h2 class="text-lg font-bold text-black">User Details</h2>
 
       <!-- Display user details -->
