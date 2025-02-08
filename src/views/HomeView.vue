@@ -1,9 +1,27 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
 
 const users = ref([]); // Store user data
 const searchQuery = ref(""); // Search input
-const refresh =ref(false) //Refresh button state
+const refresh =ref(false); //Refresh button state
+const selectedUser = ref();//Store data of selected user
+const router = useRouter();
+
+const isPopupOpen = ref(false);
+
+const openPopup = (userData) => {
+  selectedUser.value = userData;
+  console.log(selectedUser.value);
+  isPopupOpen.value = true;
+};
+
+const closePopup = (event) => {
+  if (event.target.id === "popup-overlay") {
+    isPopupOpen.value = false;
+  }
+};
+
 
 // Fetch Data from API
 const fetchData = async () => {
@@ -72,7 +90,7 @@ onMounted(fetchData);
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in filteredUsers" :key="user.login.uuid" class="hover:bg-gray-100 hover:text-black" @click="$router.push(`/user/${user.login.uuid}`)">
+          <tr v-for="user in filteredUsers" :key="user.login.uuid" class="hover:bg-gray-100 hover:text-black" @click="openPopup(user)">
             <td class="border px-4 py-2">
               <img :src="user.picture.thumbnail" alt="User Image" class="w-12 h-12 rounded-full">
             </td>
@@ -83,6 +101,51 @@ onMounted(fetchData);
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+
+  <!-- Popup div for user details -->
+  <div v-if="isPopupOpen" id="popup-overlay" @click="closePopup"
+        class="z-50 fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-[500px] text-center">
+      <h2 class="text-lg font-bold text-black">User Details</h2>
+
+      <!-- Display user details -->
+      <div class="mt-4 grid grid-cols-2 gap-y-3">
+        <p class="font-semibold text-black text-left">Name:</p>
+        <p class="text-black text-left">{{ selectedUser.name.first }} {{ selectedUser.name.last }}</p>
+
+        <p class="font-semibold text-black text-left">Gender:</p>
+        <p class="text-black text-left">{{ selectedUser.gender }}</p>
+
+        <p class="font-semibold text-black text-left">Phone:</p>
+        <p class="text-black text-left">{{ selectedUser.phone }}</p>
+
+        <p class="font-semibold text-black text-left">Email:</p>
+        <p class="text-black text-left">{{ selectedUser.email }}</p>
+
+        <p class="font-semibold text-black text-left">Age:</p>
+        <p class="text-black text-left">{{ selectedUser.dob.age }}</p>
+
+        <p class="font-semibold text-black text-left">Location:</p>
+        <p class="text-black text-left">{{ selectedUser.location.state }}, {{ selectedUser.location.country }}</p>
+
+        <p class="font-semibold text-black text-left">City:</p>
+        <p class="text-black text-left"> {{ selectedUser.location.city}} </p>
+
+        <p class="font-semibold text-black text-left">State:</p>
+        <p class="text-black text-left"> {{ selectedUser.location.state}} </p>
+
+        <p class="font-semibold text-black text-left">Country:</p>
+        <p class="text-black text-left">{{ selectedUser.location.country }}</p>
+        
+    </div>
+
+      <!-- Button to close popup -->
+      <button @click="isPopupOpen = false" class="mt-4 bg-red-500 text-white px-4 py-2 rounded">
+        Close
+      </button>
     </div>
   </div>
 </template>
